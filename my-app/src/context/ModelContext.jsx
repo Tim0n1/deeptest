@@ -1,0 +1,54 @@
+import { createContext, useContext, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
+
+// Create Context
+const ModelContext = createContext();
+
+// Create Provider Component
+export function ModelProvider({ children }) {
+  const [model, setModel] = useState(null);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [jsonFile, setJsonFile] = useState(null);
+  const [binFiles, setBinFiles] = useState([]);
+
+  // Function to load the model once both files are uploaded
+  const loadModel = async () => {
+    if (!jsonFile || binFiles.length === 0) {
+      alert("⚠️ Please upload both the .json model file and the .bin weight files.");
+      return;
+    }
+
+    try {
+      console.log("📂 Loading model:", jsonFile.name, "with", binFiles.length, "weight file(s)...");
+
+      const loadedModel = await tf.loadLayersModel(tf.io.browserFiles([jsonFile, ...binFiles]));
+      setModel(loadedModel);
+      setIsModelLoaded(true);
+
+      alert("✅ Model loaded successfully!");
+      console.log(loadedModel.summary());
+    } catch (error) {
+      console.error("❌ Error loading model:", error);
+      setIsModelLoaded(false);
+    }
+  };
+
+  return (
+    <ModelContext.Provider value={{ 
+      model, 
+      isModelLoaded, 
+      jsonFile, 
+      binFiles, 
+      setJsonFile, 
+      setBinFiles, 
+      loadModel 
+    }}>
+      {children}
+    </ModelContext.Provider>
+  );
+}
+
+// Custom hook to use the Model Context
+export function useModel() {
+  return useContext(ModelContext);
+}

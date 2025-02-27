@@ -1,0 +1,61 @@
+{
+  "format": "layers-model",
+  "generatedBy": "TensorFlow.js v3.12.0",
+  "convertedBy": "TensorFlow.js Converter v3.12.0",
+  "modelTopology": {
+    "class_name": "Sequential",
+    "config": {
+      "name": "my_model",
+      "layers": [
+        {
+          "class_name": "Dense",
+          "config": {
+            "inputShape":1,
+            "name": "dense_1",
+            "units": 32,
+            "activation": "relu",
+            "use_bias": true,
+            "kernel_initializer": { "class_name": "GlorotUniform", "config": {} },
+            "bias_initializer": { "class_name": "Zeros", "config": {} }
+          }
+        },
+        {
+          "class_name": "Dense",
+          "config": {
+            "name": "dense_2",
+            "units": 10,
+            "activation": "softmax",
+            "use_bias": true
+          }
+        }
+      ]
+    }
+  },
+  "weightsManifest": [
+    {
+      "paths": ["group1-shard1of1.bin"],
+      "weights": [
+        {
+          "name": "dense_1/kernel",
+          "shape": [64, 32],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_1/bias",
+          "shape": [32],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_2/kernel",
+          "shape": [32, 10],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_2/bias",
+          "shape": [10],
+          "dtype": "float32"
+        }
+      ]
+    }
+  ]
+}
