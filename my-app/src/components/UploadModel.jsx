@@ -1,63 +1,73 @@
 import { useState } from "react";
 import { useModel } from "../context/ModelContext";
+import { useNavigate } from "react-router-dom"; // Import navigation
 import "./UploadModel.css"; // Import the CSS file
 
+
 function UploadModel() {
-  const { loadModel, isModelLoaded, setJsonFile, setBinFiles } = useModel();
+  const { loadModel,loadRandomModel, isModelLoaded, setJsonFile, setBinFiles } = useModel();
   const [jsonFileName, setJsonFileName] = useState("");
   const [binFileNames, setBinFileNames] = useState([]);
+  const navigate = useNavigate();
 
-  const handleJsonChange = (event) => {
-    const file = event.target.files[0];
-    if (!file || !file.name.endsWith(".json")) {
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const jsonFiles = files.filter((file) => file.name.endsWith(".json"));
+    const binFiles = files.filter((file) => file.name.endsWith(".bin"));
+
+    if (jsonFiles.length === 0) {
       alert("⚠️ Please select a valid .json file.");
       return;
     }
-    setJsonFile(file);
-    setJsonFileName(file.name);
-  };
-
-  const handleBinChange = (event) => {
-    const files = Array.from(event.target.files).filter((f) =>
-      f.name.endsWith(".bin")
-    );
-    if (files.length === 0) {
-      alert("⚠️ Please select at least one .bin file.");
+    if (jsonFiles.length > 1) {
+      alert("⚠️ Please select only one .json file.");
       return;
     }
-    setBinFiles(files);
-    setBinFileNames(files.map((file) => file.name));
+    
+    setJsonFile(jsonFiles[0]);
+    setJsonFileName(jsonFiles[0].name);
+    setBinFiles(binFiles);
+    setBinFileNames(binFiles.map((file) => file.name));
   };
 
   // Determine if both files are set
   const canLoadModel = jsonFileName !== "" && binFileNames.length > 0;
+  const handleLoadRandomModel = async () => {
+    await loadRandomModel();
+    navigate("/dashboard"); // Redirect to dashboard after model loads
+  };
 
   return (
     <div className="container">
       <h2>Upload Your Model</h2>
-
-      {/* File Upload Buttons in a Row */}
-      <div className="upload-buttons">
-        {/* JSON Upload */}
-        <div className="upload-box">
-          <label>Model JSON File</label>
-          <label className="file-input">
-            📄 Choose JSON File
-            <input type="file" accept=".json" onChange={handleJsonChange} />
-          </label>
-        </div>
-
-        {/* BIN Upload */}
-        <div className="upload-box">
-          <label>Model Weight Files (.bin)</label>
-          <label className="file-input">
-            📂 Choose BIN Files
-            <input type="file" accept=".bin" multiple onChange={handleBinChange} />
-          </label>
-        </div>
+      
+      {/* Combined File Upload Button */}
+      <div className="upload-load">
+      <div className="upload-box">
+        <label>Upload Model Files (JSON + BIN)</label>
+        <label className="file-input">
+          📂 Choose Files
+          <input 
+            type="file" 
+            accept=".json,.bin" 
+            multiple 
+            onChange={handleFileChange} 
+          />
+        </label>
       </div>
 
+      {/* Confirmation Messages */}
+      {jsonFileName && (
+        <p className="confirmation">✔️ JSON file added: {jsonFileName}</p>
+      )}
+      {binFileNames.length > 0 && (
+        <p className="confirmation">
+          ✔️ BIN file(s) added: {binFileNames.join(", ")}
+        </p>
+      )}
+
       {/* Load Model Button */}
+      <div className="load-box">
       <button 
         onClick={loadModel} 
         className="load-button"
@@ -65,9 +75,15 @@ function UploadModel() {
       >
         🚀 Load Model
       </button>
+      <button
+        onClick={handleLoadRandomModel}
+        className="load-random-button"
+      >
+        🎲 Load Random Model
+        </button>
 
-      {/* Status Message */}
-      {isModelLoaded && <p className="status">🎉 Model is ready to use!</p>}
+      </div>
+      </div>
     </div>
   );
 }

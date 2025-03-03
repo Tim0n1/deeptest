@@ -1,45 +1,73 @@
-/* Upload buttons container */
+.upload-load {
+  display: flex;
+  flex-direction: column; /* Arrange elements in a column */
+  align-items: center; /* Center items horizontally */
+  gap: 20px; /* Add spacing between elements */
+  margin-top: 20px; /* Add some space above the section */
+}
+
+.load-box{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
 .upload-buttons {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: center; /* Center elements in the row */
+  align-items: center; /* Align elements vertically */
+  gap: 20px; /* Increase spacing between elements */
+  margin-bottom: 25px; /* Add some more bottom margin for separation */
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+/* Each upload box */
+.upload-box {
+  flex: 1;
+  min-width: 220px; /* Prevent items from becoming too small */
+  text-align: center;
+}
+
+/* Identical File Input Button */
+.file-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px; /* Slightly wider for better text fit */
+  height: 50px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  border: 2px solid #ccc;
+  border-radius: 8px; /* More rounded edges for a modern look */
+  background: #f8f8f8;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Hover Effect */
+.file-input:hover {
+  background: #e0e0e0;
+  transform: scale(1.05);
+}
+
+/* Hide the actual input */
+.file-input input {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .upload-buttons {
+    flex-direction: column; /* Stack buttons vertically on small screens */
     gap: 15px;
-    margin-bottom: 20px;
   }
-  
-  /* Each upload box */
-  .upload-box {
-    flex: 1;
-    text-align: center;
-  }
-  
-  /* Identical File Input Button */
+
   .file-input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px; /* Set a fixed width */
-    height: 50px; /* Set a fixed height */
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background: #f8f8f8;
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-    transition: background 0.3s, transform 0.2s;
+    width: 100%; /* Make the button full-width on small screens */
   }
-  
-  /* Hover Effect */
-  .file-input:hover {
-    background: #e8e8e8;
-    transform: scale(1.05);
-  }
-  
-  /* Hide the actual input */
-  .file-input input {
-    display: none;
-  }
-  
+}

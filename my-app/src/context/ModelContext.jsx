@@ -33,6 +33,25 @@ export function ModelProvider({ children }) {
     }
   };
 
+  const loadRandomModel = async () => {
+    try {
+      console.log("📂 Loading random model...");
+
+      const model = await tf.loadLayersModel("https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json");
+      setModel(model);
+      setIsModelLoaded(true);
+
+      model.weights.forEach((tensor, index) => {
+        console.log(`Weight ${index + 1}: ${tensor.name}, Shape:`, tensor.shape);
+      });
+    
+    
+    } catch (error) {
+      console.error("❌ Error loading random model:", error);
+      setIsModelLoaded(false);
+    }
+  }
+
   return (
     <ModelContext.Provider value={{ 
       model, 
@@ -41,7 +60,8 @@ export function ModelProvider({ children }) {
       binFiles, 
       setJsonFile, 
       setBinFiles, 
-      loadModel 
+      loadModel,
+      loadRandomModel
     }}>
       {children}
     </ModelContext.Provider>
