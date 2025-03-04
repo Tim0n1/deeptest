@@ -13,10 +13,7 @@ export function ModelProvider({ children }) {
 
   // Function to load the model once both files are uploaded
   const loadModel = async () => {
-    if (!jsonFile || binFiles.length === 0) {
-      alert("⚠️ Please upload both the .json model file and the .bin weight files.");
-      return;
-    }
+
 
     try {
       console.log("📂 Loading model:", jsonFile.name, "with", binFiles.length, "weight file(s)...");
@@ -24,6 +21,17 @@ export function ModelProvider({ children }) {
       const loadedModel = await tf.loadLayersModel(tf.io.browserFiles([jsonFile, ...binFiles]));
       setModel(loadedModel);
       setIsModelLoaded(true);
+      if (loadedModel.weights.length === 0) {
+        throw new Error("Weights are missing or not loaded properly.");
+      }
+      else{
+        loadedModel.weights.forEach((tensor, index) => {
+          console.log(`Weight ${index + 1}: ${tensor.name}, Shape:`, tensor.shape);
+          tensor.val.print(); // Prints the actual weight values
+        });
+        
+    }
+    
 
       alert("✅ Model loaded successfully!");
       console.log(loadedModel.summary());

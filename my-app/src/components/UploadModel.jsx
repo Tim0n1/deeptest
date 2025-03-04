@@ -31,7 +31,7 @@ function UploadModel() {
   };
 
   // Determine if both files are set
-  const canLoadModel = jsonFileName !== "" && binFileNames.length > 0;
+  const canLoadModel = jsonFileName !== "";
   const handleLoadRandomModel = async () => {
     await loadRandomModel();
     navigate("/dashboard"); // Redirect to dashboard after model loads

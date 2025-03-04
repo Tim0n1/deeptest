@@ -1,0 +1,6 @@
+.model-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+}
